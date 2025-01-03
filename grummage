@@ -4,9 +4,9 @@ import subprocess
 import sys
 import tempfile
 
-from textual.app import App
+from textual.app import App, ComposeResult
 from textual.containers import Container, Horizontal, VerticalScroll
-from textual.widgets import Tree, Footer, Static
+from textual.widgets import Tree, Footer, Static, Markdown
 
 
 class Grummage(App):
@@ -284,7 +284,13 @@ class Grummage(App):
                 f"Related Vulnerabilities:\n"
             )
             for related in details["related"]:
-                detail_text += f"- {related['id']} ({related['dataSource']})\n"
+                detail_text += f"- {related['id']} "
+                detail_text += f"(Link: {related['dataSource']}) "
+                # yield Link(f"- {related['dataSource']}",url={related['dataSource']},)
+                # TODO: define a function that just linkifies what is sent to it and add that here...
+                # example: detail_text += f"make_link({related['dataSource']})"
+                detail_text += "\n"
+
             self.debug_log(f"Displaying details for {details['id']}")
             self.details_display.update(detail_text)
             self.detailed_text = detail_text
